@@ -9,16 +9,15 @@ public class FileSystem {
     HashMap<String, Deque<File>> files = new HashMap<>();
 
 
-    public boolean addFile(String path,File file){
-        file.setState(1);
+    public boolean addFile(String path,File file,int snp){
+        file.setState(snp);
        if(files.containsKey(path)){
            if(files.get(path).size() == 1){
-               files.get(path).peekFirst().setState(0);
                 files.get(path).addLast(file);
             }
             else{
                 files.get(path).removeFirst();
-                files.get(path).peekFirst().setState(0);
+                files.get(path).peekFirst().setState(1);
                 files.get(path).addLast(file);
             }
             
@@ -26,7 +25,7 @@ public class FileSystem {
        }
        else{
             Deque<File> dq = new LinkedList<>();
-            file.setState(2);
+            file.setState(snp);
             dq.add(file);
             files.put(path,dq);
             return true;
@@ -47,7 +46,7 @@ public class FileSystem {
                 //if it beongs to snap2 its added 
 
                 int snap = fileStates.peekLast().getState();
-                if(snap==0){
+                if(snap==1){
                     deletedFiles.add(fileStates.peekLast());
                 }
                 else if(snap==2){
